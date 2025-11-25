@@ -1,0 +1,23 @@
+﻿using System.Text.Json.Serialization;
+
+namespace SapiensBank;
+
+public class Conta
+{
+    public int Numero { get; set; }
+    public string Cliente { get; set; }
+    public string Cpf { get; set; }
+    public string Senha { get; set; } = string.Empty;
+    public decimal Limite { get; set; }
+    public decimal Saldo { get; private set; }
+    [JsonIgnore]
+    public decimal SaldoDisponivel => Saldo + Limite;
+    public Conta(int numero, string cliente, string cpf, string senha, decimal limite = 0)
+    {
+        Numero = numero;
+        Cliente = cliente;
+        Cpf = cpf;
+        Senha = senha;
+        Limite = limite;
+    }
+}
