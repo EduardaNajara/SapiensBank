@@ -9,7 +9,7 @@ public class Conta
     public string Cpf { get; set; }
     public string Senha { get; set; } = string.Empty;
     public decimal Limite { get; set; }
-    public decimal Saldo { get; private set; }
+    public decimal Saldo { get; set; }
     [JsonIgnore]
     public decimal SaldoDisponivel => Saldo + Limite;
     public Conta(int numero, string cliente, string cpf, string senha, decimal limite = 0)

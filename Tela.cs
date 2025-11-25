@@ -18,7 +18,11 @@ public class Tela
             switch (opcao)
             {
                 case "1": ContaMenu(); break;
-                case "2": ListarContasMenu(); break;
+                case "2": ListarContasMenu(); break; 
+                case "3": EfetuarSaque(); break;
+                case "4": EfetuarDeposito(); break;
+                case "5": AumentarLimite(); break;
+                case "6": DiminuirLimite(); break;
             }
         } while (opcao != "0");
     }
@@ -30,6 +34,8 @@ public class Tela
         WriteLine(" 2 - Listar Contas");
         WriteLine(" 3 - Efetuar Saque");
         WriteLine(" 4 - Efetuar Depósito");
+        WriteLine(" 5 - Aumentar Limite");
+        WriteLine(" 6 - Diminuir Limite");
 
         ForegroundColor = System.ConsoleColor.Red;
         WriteLine("\n 0 - Sair");
@@ -85,6 +91,149 @@ public class Tela
         Write(" Pressione Enter para continuar...");
         ResetColor();
         ReadLine();
+    }
+    public void EfetuarSaque()
+    {
+        Clear();
+        CriarTitulo("    Efetuar Saque");
+        Write(" Número da Conta: ");
+        var numero = Convert.ToInt32(ReadLine());
+        var conta = _banco.Contas.FirstOrDefault(c => c.Numero == numero);
+        if (conta == null)
+        {
+            ForegroundColor = System.ConsoleColor.Red;
+            WriteLine(" Conta não encontrada!");
+            ResetColor();
+            ReadLine();
+            return;
+        }
+        Write(" Valor do Saque: ");
+        var valor = Convert.ToDecimal(ReadLine());
+        if (valor > conta.SaldoDisponivel)
+        {
+            ForegroundColor = System.ConsoleColor.Red;
+            WriteLine(" Saldo insuficiente!");
+            ResetColor();
+            ReadLine();
+            return;
+        }
+        if (valor <= 0)
+        {
+            ForegroundColor = System.ConsoleColor.Red;
+            WriteLine(" Valor inválido para depósito!");
+            ResetColor();
+            ReadLine();
+            return;
+        }
+        conta.Saldo -= valor;
+        CriarLinha();
+        ForegroundColor = System.ConsoleColor.Green;
+        WriteLine(" Saque efetuado com sucesso!");
+        ResetColor();
+        ReadLine();
+        _banco.SaveContas();
+    }
+    public void EfetuarDeposito()
+    {
+        Clear();
+        CriarTitulo("    Efetuar Depósito");
+        Write(" Número da Conta: ");
+        var numero = Convert.ToInt32(ReadLine());
+        var conta = _banco.Contas.FirstOrDefault(c => c.Numero == numero);
+        if (conta == null)
+        {
+            ForegroundColor = System.ConsoleColor.Red;
+            WriteLine(" Conta não encontrada!");
+            ResetColor();
+            ReadLine();
+            return;
+        }
+        Write(" Valor do Depósito: ");
+        var valor = Convert.ToDecimal(ReadLine());
+        if (valor <= 0)
+        {
+            ForegroundColor = System.ConsoleColor.Red;
+            WriteLine(" Valor inválido para depósito!");
+            ResetColor();
+            ReadLine();
+            return;
+        }
+        conta.Saldo += valor;
+
+        CriarLinha();
+        ForegroundColor = System.ConsoleColor.Green;
+        WriteLine(" Depósito efetuado com sucesso!");
+        ResetColor();
+        ReadLine();
+        _banco.SaveContas();
+    }
+    public void AumentarLimite()
+    {
+        Clear();
+        CriarTitulo("    Aumentar Limite");
+        Write("Número da Conta: ");
+        var numero = Convert.ToInt32(ReadLine());
+        var conta = _banco.Contas.FirstOrDefault(c => c.Numero == numero);
+        if (conta == null)
+        {
+            ForegroundColor = System.ConsoleColor.Red;
+            WriteLine(" Conta não encontrada!");
+            ResetColor();
+            ReadLine();
+            return;
+        }
+        Write(" Valor a ser adicionado: ");
+        var valor = Convert.ToDecimal(ReadLine());
+        if (valor <= 0)
+        {
+            ForegroundColor = System.ConsoleColor.Red;
+            WriteLine(" Valor inválido!");
+            ResetColor();
+            ReadLine();
+            return;
+        }
+        conta.Limite += valor;
+
+        CriarLinha();
+        ForegroundColor = System.ConsoleColor.Green;
+        WriteLine("Aumento efetuado com sucesso!");
+        ResetColor();
+        ReadLine();
+        _banco.SaveContas();
+    }
+    public void DiminuirLimite()
+    {
+        Clear();
+        CriarTitulo("   Diminuir Limite");
+        Write("Número da Conta: ");
+        var numero = Convert.ToInt32(ReadLine());
+        var conta = _banco.Contas.FirstOrDefault(c => c.Numero == numero);
+        if (conta == null)
+        {
+            ForegroundColor = System.ConsoleColor.Red;
+            WriteLine(" Conta não encontrada!");
+            ResetColor();
+            ReadLine();
+            return;
+        }
+        Write(" Valor a ser reduzido: ");
+        var valor = Convert.ToDecimal(ReadLine());
+        if (valor <= 0)
+        {
+            ForegroundColor = System.ConsoleColor.Red;
+            WriteLine(" Valor inválido!");
+            ResetColor();
+            ReadLine();
+            return;
+        }
+        conta.Limite -= valor;
+
+        CriarLinha();
+        ForegroundColor = System.ConsoleColor.Green;
+        WriteLine("Redução efetuada com sucesso!");
+        ResetColor();
+        ReadLine();
+        _banco.SaveContas();
     }
     public void CriarTitulo(string titulo)
     {
